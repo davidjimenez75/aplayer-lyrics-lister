@@ -29,3 +29,12 @@ This is optional, but is helpful to point and click unknow words or phrases in t
 5- Open your browser on:
 
 http://localhost/aplayer/
+
+
+
+## Links to APlayer Author
+
+**APlayer** © [DIYgod](https://github.com/DIYgod), Released under the [MIT](./LICENSE) License.<br>
+Authored and maintained by DIYgod with help from contributors ([list](https://github.com/DIYgod/APlayer/contributors)).
+
+> [Blog](https://diygod.me) · GitHub [@DIYgod](https://github.com/DIYgod) · Twitter [@DIYgod](https://twitter.com/DIYgod) · Telegram Channel [@awesomeDIYgod](https://t.me/awesomeDIYgod)
