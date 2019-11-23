@@ -35,7 +35,7 @@
         }
         .aplayer-body{
             /* border:1px solid blue; */
-            height: 90vh;                 /* PUSH DOWN THE TRACKLIST */
+            height: 100vh;                 /* PUSH DOWN THE TRACKLIST */
         }        
         .aplayer-title {                    /* SONG TITLE */
             /* border:1px solid black; */
@@ -54,7 +54,7 @@
         .aplayer .aplayer-lrc {
             border:1px solid #efefef;             /* BORDERS OF THE LYRICS BOX */
             width: 100%important;
-            height: 60vh!important;          
+            height: calc(100vh - 156px)!important;          
             /* position: absolute!important;*/           /* LYRICS TO THE LEFT?  WORKS? */
         }
         /* LYRICS */
