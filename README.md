@@ -1,6 +1,6 @@
 # aplayer-lyrics-lister
 
-APlayer + Small PHP script to list your own music with lyrics
+[APlayer](https://github.com/MoePlayer/APlayer) + Small PHP script to list your own music with lyrics
 
 ## Recommended instalation:
 
