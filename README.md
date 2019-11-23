@@ -32,9 +32,24 @@ http://localhost/aplayer/
 
 
 
-## Links to APlayer Author
+## Links to APlayer Authors
 
 **APlayer** © [DIYgod](https://github.com/DIYgod), Released under the [MIT](./LICENSE) License.<br>
 Authored and maintained by DIYgod with help from contributors ([list](https://github.com/DIYgod/APlayer/contributors)).
 
 > [Blog](https://diygod.me) · GitHub [@DIYgod](https://github.com/DIYgod) · Twitter [@DIYgod](https://twitter.com/DIYgod) · Telegram Channel [@awesomeDIYgod](https://t.me/awesomeDIYgod)
+
+https://github.com/MoePlayer/APlayer
+
+
+
+## FAQ
+
+### There is any pause key for the player?
+
+Press Space for play/pause.
+
+Keycode for space (32) can be changed in index.php in the bottom Javascript "function checkKey(e) {"
+
+For example: 19 = Keyboard Pause keycode, for other keycodes use: https://keycode.info/
+
