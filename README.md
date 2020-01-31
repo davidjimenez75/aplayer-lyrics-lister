@@ -2,6 +2,9 @@
 
 [APlayer](https://github.com/MoePlayer/APlayer) + Small PHP script to list your own music with lyrics
 
+![WYSIWYG smileys](https://raw.githubusercontent.com/davidjimenez75/aplayer-lyrics-lister/master/folder.jpg)
+
+
 ## Recommended instalation:
 
 1- Download and install XAMPP
@@ -47,9 +50,12 @@ https://github.com/MoePlayer/APlayer
 
 ### There is any pause key for the player?
 
-Press Space for play/pause.
+Press Esc for Play/Pause.
 
-Keycode for space (32) can be changed in index.php in the bottom Javascript "function checkKey(e) {"
+If you want to Play/Pause with another key change the Keycode in index.php the 
+bottom Javascript "function checkKey(e) {"
 
-For example: 19 = Keyboard Pause keycode, for other keycodes use: https://keycode.info/
+For example: 19 = Keyboard Pause keycode
+
+For other keycodes use: https://keycode.info/
 
