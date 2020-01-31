@@ -138,8 +138,21 @@
 </head>
 <body>
 
+<?php
+if (!isset($_GET['folder']))
+{
+    list_audio_folders();
+    define ("AUDIO_FOLDER","./audio/");
+    die();
+}else{
+	
+    define ("AUDIO_FOLDER","./audio/".$_GET['folder']."/");
+}
+?>
+
+
     <div class="container">
-            <div id="player5" class="aplayer"></div>
+        <div id="player5" class="aplayer"></div>
     </div><!--/container-->
 
     <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
@@ -148,7 +161,7 @@
     const ap5 = new APlayer({
     element: document.getElementById('player5'),
     mini: false,
-    autoplay: false,
+    autoplay: true,
     lrcType: 3,
     mutex: true,
     theme: '#e9e9e9',
@@ -160,7 +173,9 @@
 <?php
 
 
-const AUDIO_FOLDER="./audio/";
+
+
+
 $dir_iterator = new RecursiveDirectoryIterator(AUDIO_FOLDER);
 $iterator = new RecursiveIteratorIterator($dir_iterator, RecursiveIteratorIterator::SELF_FIRST);
 // could use CHILD_FIRST if you so wish
@@ -180,14 +195,39 @@ foreach ($iterator as $file) {
 }
 
 
+
+function list_audio_folders() {
+
+	// IGNORED FILES AND FOLDERS
+	$a_ignored=array(".git");
+ 
+ 
+ 
+	foreach (new DirectoryIterator('./audio/') as $fileInfo) {
+	    if($fileInfo->isDot()) continue;
+	    if ((!in_array($fileInfo->getFilename(), $a_ignored)))
+	    {
+	        echo '<a href="?folder='.$fileInfo->getFilename().'">&#128194;<small>'.$fileInfo->getFilename() . "</small></a><br>\n";
+	    }
+	}
+}
+
 function setCover($file) {
     $file=str_replace("../", "/",$file);        
     $file=str_replace("\\", "/",$file);
     if (strtolower(substr($file,-5))==".flac"){
         $file=substr($file,0,-5).".jpg";
+        if (!file_exists($file))
+        {
+            return dirname($file)."/folder.jpg";
+        }            
         return $file;
     }else{ 
         $file=substr($file,0,-4).".jpg";
+        if (!file_exists($file))
+        {
+            return dirname($file)."/folder.jpg";
+        }       
         return $file;
     }
 }
@@ -236,7 +276,7 @@ function setUrl($file) {
 }
 
 function isAudioExtension ($file) {
-    $audio_extensions=array(".mp3", ".ogg", ".aac", ".flac");
+    $audio_extensions=array(".mp3", ".ogg", ".aac", ".flac", ".m4a");
 
     if (strtolower(substr($file,-5))==".flac"){
         return true;
@@ -246,6 +286,12 @@ function isAudioExtension ($file) {
         return false;
     }
 }
+
+
+
+
+
+
 
 ?>
 
@@ -268,6 +314,7 @@ ap5.on('listswitch', (data) => {
 
 
 /* KEYBOARD EVENTS */
+/* For more keycodes see:  https://keycode.info  */
 
 document.onkeydown = checkKey;
     
@@ -297,7 +344,10 @@ document.onkeydown = checkKey;
         }else if (e.keyCode == '32') {
             // SPACE
             console.log("SPACE");
-            ap5.toggle();               // SPACE  -> PLAY/PAUSE
+        }else if (e.keyCode == '27') {
+            // ESC
+            console.log("ESC");
+            ap5.toggle();               // Pressing Escape key -> PLAY/PAUSE
         }
     }
 
