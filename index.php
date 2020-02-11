@@ -127,6 +127,9 @@
             color: #08c;
             text-decoration: none;
         }
+        a:hover {
+            color:red;
+        }
         p {
 
         }
@@ -145,7 +148,7 @@ if (!isset($_GET['folder']))
     define ("AUDIO_FOLDER","./audio/");
     die();
 }else{
-	
+    $_GET['folder']=substr($_GET['folder'],7);
     define ("AUDIO_FOLDER","./audio/".$_GET['folder']."/");
 }
 ?>
@@ -202,14 +205,34 @@ function list_audio_folders() {
 	$a_ignored=array(".git");
  
  
- 
-	foreach (new DirectoryIterator('./audio/') as $fileInfo) {
-	    if($fileInfo->isDot()) continue;
-	    if ((!in_array($fileInfo->getFilename(), $a_ignored)))
-	    {
-	        echo '<a href="?folder='.$fileInfo->getFilename().'">&#128194;<small>'.$fileInfo->getFilename() . "</small></a><br>\n";
-	    }
-	}
+    $dir_iterator = new RecursiveDirectoryIterator("./audio/");
+    $iterator = new RecursiveIteratorIterator($dir_iterator, RecursiveIteratorIterator::SELF_FIRST);
+    // could use CHILD_FIRST if you so wish
+    $i=0;
+    foreach ($iterator as $file) {
+        $filenameok=str_replace('\\','/',$file);
+        if ( (is_dir($file)) || (is_link($file)))  {
+           if ((substr($file,-2)=="..") || (substr($file,-1)==".")) continue;
+           {
+               
+                $level=substr_count($filenameok,'/');
+                for ($i=3;$i<=$level;$i++)
+                {
+                    echo "&nbsp;&nbsp;&nbsp;<small>";
+                }
+                echo '<a href="?folder='.$file->getPath().'/'.$file->getFilename().'/">&#128194;<small>'.$file->getFilename() . "</small></a><br>\n";
+                //echo $filenameok."($level)<br>";
+                for ($i=1;$i<=$level;$i++)
+                {
+                    echo "</small>";
+                }
+
+
+           }
+        }
+        //echo $file."<hr>";
+    }
+   
 }
 
 function setCover($file) {
