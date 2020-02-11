@@ -149,7 +149,7 @@ if (!isset($_GET['folder']))
     die();
 }else{
     $_GET['folder']=substr($_GET['folder'],7);
-    define ("AUDIO_FOLDER","./audio/".$_GET['folder']."/");
+    define ("AUDIO_FOLDER","./audio/".$_GET['folder']);
 }
 ?>
 
@@ -220,7 +220,7 @@ function list_audio_folders() {
                 {
                     echo "&nbsp;&nbsp;&nbsp;<small>";
                 }
-                echo '<a href="?folder='.$file->getPath().'/'.$file->getFilename().'/">&#128194;<small>'.$file->getFilename() . "</small></a><br>\n";
+                echo '<a href="?folder='.urlencode($file->getPath().'/'.$file->getFilename().'/').'">&#128194;<small>'.$file->getFilename() . "</small></a><br>\n";
                 //echo $filenameok."($level)<br>";
                 for ($i=1;$i<=$level;$i++)
                 {
@@ -261,10 +261,10 @@ function setLrc($file) {
     $file=str_replace("\\", "/",$file);
     if (strtolower(substr($file,-5))==".flac"){
         $file=substr($file,0,-5).".lrc";
-        return $file;
+        return escapeJsonString($file);
     }else{ 
         $file=substr($file,0,-4).".lrc";
-        return $file;
+        return escapeJsonString($file);
     }
 }
 
@@ -273,29 +273,29 @@ function setLrc($file) {
 function setName($file) {
     $file=str_replace("\\", "/",$file);
     $file=str_replace(AUDIO_FOLDER,"",$file);
-    $hyphenPos=strpos($file,'-');
-    if ($hyphenPos!==false) {
-        return substr($file,0,$hyphenPos);
-    }
-    return $file;
+    $hyphenPos=strrpos($file,'/');
+    return escapeJsonString(substr($file,$hyphenPos+1));
 }
 
 
 function setArtist($file) {
     $file=str_replace("\\", "/",$file);
+    $file=str_replace("//", "/",$file);
     $file=str_replace(AUDIO_FOLDER,"",$file);
-    $hyphenPos=strpos($file,'-');
-    if ($hyphenPos!==false) {
-        return substr($file,$hyphenPos+1);
-    }
-    return $file;
+    $hyphenPos=strrpos(substr($file,0,-1),'/');
+    $file=substr($file,0,$hyphenPos);
+    $hyphenPos=strrpos($file,'/');
+    $file=substr($file,$hyphenPos+1);
+    return escapeJsonString(substr($file,$hyphenPos+1));
 }
 
 
 function setUrl($file) {
+    $file=str_replace(".\\/", "./",$file);
     $file=str_replace("\\", "/",$file);
+    $file=str_replace("//", "/",$file);    
     $file=str_replace("../", "/",$file);    
-    return $file;
+    return escapeJsonString($file);
 }
 
 function isAudioExtension ($file) {
@@ -310,7 +310,16 @@ function isAudioExtension ($file) {
     }
 }
 
-
+/**
+ * @param $value
+ * @return mixed
+ */
+function escapeJsonString($value) { # list from www.json.org: (\b backspace, \f formfeed)
+    $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c","'");
+    $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b","\'");
+    $result = str_replace($escapers, $replacements, $value);
+    return $result;
+}
 
 
 
