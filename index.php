@@ -89,7 +89,7 @@
 
             text-align: center!important;                         /* LYRICS ON THE CENTER? */        
             
-            transform : perspective(1px) translate3d(-10px,-20px,0) scale3d(0.7,0.7, 1)
+            /* transform : perspective(1px) translate3d(-10px,-20px,0) scale3d(0.7,0.7, 1) */
 
 
         }
