@@ -272,21 +272,21 @@ function setLrc($file) {
 
 function setName($file) {
     $file=str_replace("\\", "/",$file);
+    $file=str_replace("_", " ",$file);    
     $file=str_replace(AUDIO_FOLDER,"",$file);
     $hyphenPos=strrpos($file,'/');
-    return escapeJsonString(substr($file,$hyphenPos+1));
+    return escapeJsonString(substr($file,$hyphenPos));
 }
 
 
 function setArtist($file) {
-    $file=str_replace("\\", "/",$file);
+    $file=str_replace("\\", "/",AUDIO_FOLDER);
     $file=str_replace("//", "/",$file);
-    $file=str_replace(AUDIO_FOLDER,"",$file);
-    $hyphenPos=strrpos(substr($file,0,-1),'/');
-    $file=substr($file,0,$hyphenPos);
-    $hyphenPos=strrpos($file,'/');
-    $file=substr($file,$hyphenPos+1);
-    return escapeJsonString(substr($file,$hyphenPos+1));
+    $file=str_replace("./audio/", "",$file);    
+    $file=str_replace("/", "",$file);    
+    $file=str_replace("_", " ",$file);        
+
+    return escapeJsonString($file);
 }
 
 
