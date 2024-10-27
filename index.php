@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>aplayer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
     <style>
         body {
             margin: 0;
@@ -183,7 +184,18 @@ $dir_iterator = new RecursiveDirectoryIterator(AUDIO_FOLDER);
 $iterator = new RecursiveIteratorIterator($dir_iterator, RecursiveIteratorIterator::SELF_FIRST);
 // could use CHILD_FIRST if you so wish
 $i=0;
+
+$files = array();
+    
 foreach ($iterator as $file) {
+    if (isAudioExtension($file)) {
+        $files[] = $file;
+    }
+}
+
+natcasesort($files);
+
+foreach ($files as $file) {
     if (isAudioExtension($file)) {
         echo "\r\n{";
         echo "\r\nname: '".setName($file)."',";
@@ -209,9 +221,35 @@ function list_audio_folders() {
     $iterator = new RecursiveIteratorIterator($dir_iterator, RecursiveIteratorIterator::SELF_FIRST);
     // could use CHILD_FIRST if you so wish
     $i=0;
+    $files = array();
+    
     foreach ($iterator as $file) {
+        if (isAudioExtension($file)) {
+            $files[] = $file;
+        }
+    }
+    
+    natcasesort($files);
+    $a_folders=array();
+
+    foreach ($files as $file) {
+        $folder=dirname($file);
+        $folder_human=str_replace('_',' ',$folder);
+        $folder_human=str_replace('./audio/','',$folder_human);
+
+        //echo $file."<br>";
+        if (!in_array($folder, $a_folders))
+        {
+            // FOLDER ICON? - &#128194;
+            echo '<a href="?folder='.urlencode($folder.'/').'"><small>- '.$folder_human. "</small></a><br>\n";
+            $a_folders[]=$folder;
+        }
+        $file=basename($file);
+
+        /*
         $filenameok=str_replace('\\','/',$file);
         if ( (is_dir($file)) || (is_link($file)))  {
+            echo $file;
            if ((substr($file,-2)=="..") || (substr($file,-1)==".")) continue;
            {
                
@@ -220,7 +258,7 @@ function list_audio_folders() {
                 {
                     echo "&nbsp;&nbsp;&nbsp;<small>";
                 }
-                echo '<a href="?folder='.urlencode($file->getPath().'/'.$file->getFilename().'/').'">&#128194;<small>'.$file->getFilename() . "</small></a><br>\n";
+                echo '<a href="?folder='.urlencode(realpath($file).'/'.$file->getFilename().'/').'">&#128194;<small>- '.$file. "</small></a><br>\n";
                 //echo $filenameok."($level)<br>";
                 for ($i=1;$i<=$level;$i++)
                 {
@@ -231,6 +269,7 @@ function list_audio_folders() {
            }
         }
         //echo $file."<hr>";
+        */
     }
    
 }
@@ -272,7 +311,6 @@ function setLrc($file) {
 
 function setName($file) {
     $file=str_replace("\\", "/",$file);
-    $file=str_replace("_", " ",$file);    
     $file=str_replace(AUDIO_FOLDER,"",$file);
     $hyphenPos=strrpos($file,'/');
     return escapeJsonString(substr($file,$hyphenPos));
