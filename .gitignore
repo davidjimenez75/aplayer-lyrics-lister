@@ -18,3 +18,11 @@ Homestead.json
 
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/
+
+# Ignoring subfolders
+public/uploads/
+public/uploads/*
+audio/music/
+audio/music/*
+audio/podcasts/
+audio/podcasts/*
