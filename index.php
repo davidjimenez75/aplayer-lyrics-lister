@@ -146,11 +146,10 @@
 if (!isset($_GET['folder']))
 {
     list_audio_folders();
-    define ("AUDIO_FOLDER","./audio/");
+    define ("AUDIO_FOLDER",".".DIRECTORY_SEPARATOR); // ROOT FOLDER
     die();
 }else{
-    $_GET['folder']=substr($_GET['folder'],7);
-    define ("AUDIO_FOLDER","./audio/".$_GET['folder']);
+    define ("AUDIO_FOLDER",".".DIRECTORY_SEPARATOR.$_GET['folder']);
 }
 ?>
 
@@ -214,10 +213,10 @@ foreach ($files as $file) {
 function list_audio_folders() {
 
 	// IGNORED FILES AND FOLDERS
-	$a_ignored=array(".git");
+	$a_ignored=array(".git","dist","src","node_modules","vendor");
  
  
-    $dir_iterator = new RecursiveDirectoryIterator("./audio/");
+    $dir_iterator = new RecursiveDirectoryIterator("./");
     $iterator = new RecursiveIteratorIterator($dir_iterator, RecursiveIteratorIterator::SELF_FIRST);
     // could use CHILD_FIRST if you so wish
     $i=0;
@@ -235,7 +234,8 @@ function list_audio_folders() {
     foreach ($files as $file) {
         $folder=dirname($file);
         $folder_human=str_replace('_',' ',$folder);
-        $folder_human=str_replace('./audio/','',$folder_human);
+        $folder_human=str_replace('./','',$folder_human);
+        $folder_human=str_replace('.\\','',$folder_human);
 
         //echo $file."<br>";
         if (!in_array($folder, $a_folders))
@@ -320,7 +320,7 @@ function setName($file) {
 function setArtist($file) {
     $file=str_replace("\\", "/",AUDIO_FOLDER);
     $file=str_replace("//", "/",$file);
-    $file=str_replace("./audio/", "",$file);    
+    $file=str_replace("./", "",$file);    
     $file=str_replace("/", "",$file);    
     $file=str_replace("_", " ",$file);        
 
