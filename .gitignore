@@ -1,5 +1,15 @@
+# Ignore all subfolders in the root directory
+*/
+
+# Not ignore this sulfolders 
+!src/
+!dist/
+
+# Ignore directories that should not be tracked by Git
 vendor/
 node_modules/
+
+# Ignore filesthat should not be tracked by Git
 npm-debug.log
 
 # Laravel 4 specific
@@ -18,11 +28,3 @@ Homestead.json
 
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/
-
-# Ignoring subfolders
-public/uploads/
-public/uploads/*
-audio/music/
-audio/music/*
-audio/podcasts/
-audio/podcasts/*
