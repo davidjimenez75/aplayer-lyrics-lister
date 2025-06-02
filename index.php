@@ -12,7 +12,7 @@
         }
         .container {
             width: 100%;                                     /* AUTO-WIDTH WORKING!!!  */
-            height: height: calc(100vh - 100px);             /* AUTO-HEIGHT WORKING!!! */
+            height: calc(100vh - 100px);                    /* AUTO-HEIGHT WORKING!!! */
             /* max-width: 32rem;*/
         }
         #player5 {
@@ -134,6 +134,41 @@
         p {
 
         }
+        
+        /* Search box styles */
+        .search-container {
+            position: fixed;
+            top: 3px;
+            right: 3px;
+            z-index: 1000;
+        }
+        
+        #searchBox {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            width: 200px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        #searchBox:focus {
+            border-color: #08c;
+        }
+        
+        .folder-item {
+            transition: opacity 0.3s;
+        }
+        
+        .folder-item.hidden {
+            display: none;
+        }
+        
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/vconsole/dist/vconsole.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js/dist/hls.min.js"></script>
@@ -145,8 +180,50 @@
 <?php
 if (!isset($_GET['folder']))
 {
+    // Add search box
+    echo '<div class="search-container">';
+    echo '<input type="text" id="searchBox" placeholder="Search directories..." onkeyup="filterDirectories()">';
+    echo '</div>';
+    
     list_audio_folders();
     define ("AUDIO_FOLDER",".".DIRECTORY_SEPARATOR); // ROOT FOLDER
+    ?>
+    
+    <script>
+    function filterDirectories() {
+        var searchTerm = document.getElementById('searchBox').value.toLowerCase();
+        var folderItems = document.querySelectorAll('.folder-item');
+        
+        folderItems.forEach(function(item) {
+            var text = item.textContent.toLowerCase();
+            if (text.includes(searchTerm)) {
+                item.style.display = 'block';
+                // Highlight matching text only in the folder name, not in URLs
+                if (searchTerm.length > 0) {
+                    var link = item.querySelector('a');
+                    var small = link.querySelector('small');
+                    var originalText = small.getAttribute('data-original-text') || small.textContent;
+                    if (!small.getAttribute('data-original-text')) {
+                        small.setAttribute('data-original-text', originalText);
+                    }
+                    var regex = new RegExp('(' + searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+                    small.innerHTML = originalText.replace(regex, '<span class="highlight">$1</span>');
+                } else {
+                    var link = item.querySelector('a');
+                    var small = link.querySelector('small');
+                    var originalText = small.getAttribute('data-original-text');
+                    if (originalText) {
+                        small.textContent = originalText;
+                    }
+                }
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+    </script>
+    
+    <?php
     die();
 }else{
     define ("AUDIO_FOLDER",".".DIRECTORY_SEPARATOR.$_GET['folder']);
@@ -231,17 +308,17 @@ function list_audio_folders() {
     natcasesort($files);
     $a_folders=array();
 
+    echo "<br><br>\n";
     foreach ($files as $file) {
         $folder=dirname($file);
         $folder_human=str_replace('_',' ',$folder);
         $folder_human=str_replace('./','',$folder_human);
         $folder_human=str_replace('.\\','',$folder_human);
 
-        //echo $file."<br>";
         if (!in_array($folder, $a_folders))
         {
             // FOLDER ICON? - &#128194;
-            echo '<a href="?folder='.urlencode($folder.'/').'"><small>- '.$folder_human. "</small></a><br>\n";
+            echo '<div class="folder-item"><a href="?folder='.urlencode($folder.'/').'"><small>- '.$folder_human. "</small></a></div>\n";
             $a_folders[]=$folder;
         }
         $file=basename($file);
