@@ -159,6 +159,8 @@
         
         .folder-item {
             transition: opacity 0.3s;
+            word-wrap: break-word;
+            text-indent: 1.40em hanging;
         }
         
         .folder-item.hidden {
@@ -318,7 +320,7 @@ function list_audio_folders() {
         if (!in_array($folder, $a_folders))
         {
             // FOLDER ICON? - &#128194;
-            echo '<div class="folder-item"><a href="?folder='.urlencode($folder.'/').'"><small>- '.$folder_human. "</small></a></div>\n";
+            echo '<div class="folder-item"><a href="?folder='.urlencode($folder.'/').'"><small>📁 '.$folder_human. "</small></a></div>\n";
             $a_folders[]=$folder;
         }
         $file=basename($file);
