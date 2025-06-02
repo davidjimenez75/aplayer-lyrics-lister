@@ -358,14 +358,32 @@ function setCover($file) {
         $file=substr($file,0,-5).".jpg";
         if (!file_exists($file))
         {
-            return dirname($file)."/folder.jpg";
+            // Check for folder.jpg first, then cover.jpg
+            $folderCover = dirname($file)."/folder.jpg";
+            $coverCover = dirname($file)."/cover.jpg";
+            if (file_exists($folderCover)) {
+                return $folderCover;
+            } elseif (file_exists($coverCover)) {
+                return $coverCover;
+            } else {
+                return $folderCover; // fallback to folder.jpg even if it doesn't exist
+            }
         }            
         return $file;
     }else{ 
         $file=substr($file,0,-4).".jpg";
         if (!file_exists($file))
         {
-            return dirname($file)."/folder.jpg";
+            // Check for folder.jpg first, then cover.jpg
+            $folderCover = dirname($file)."/folder.jpg";
+            $coverCover = dirname($file)."/cover.jpg";
+            if (file_exists($folderCover)) {
+                return $folderCover;
+            } elseif (file_exists($coverCover)) {
+                return $coverCover;
+            } else {
+                return $folderCover; // fallback to folder.jpg even if it doesn't exist
+            }
         }       
         return $file;
     }
